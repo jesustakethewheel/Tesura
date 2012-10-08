@@ -1,0 +1,56 @@
+#“Œ•û’e–‹•—[Single]
+#Title [Narutouhou]
+#Text [The one winged angel that wille destroy the world]
+#ScriptVersion [2]
+
+script_enemy_main {
+let angle = 90;
+let ShotCounter = 0; 
+@Initialize
+{
+SetX(GetCenterX);
+SetY(GetClipMinY + 120);
+SetLife(6969);
+LoadGraphic("\script\tesura\thomasevil.jpg");
+SetTexture("\script\tesura\thomasevil.jpg");
+SetGraphicRect(0,0,63, 63);
+}
+@MainLoop
+{
+SetCollisionA(GetX, GetY, 24);
+SetCollisionB(GetX, GetY, 24);
+ShotCounter ++;
+if (ShotCounter == 4)
+{
+Bullet (angle, 3, 4, WHITE01);
+angle += 10;
+}
+else if (ShotCounter == 12)
+{
+Bullet(angle, 6, 16, YELLOW01);
+angle += 5;
+ShotCounter = 0;
+}
+}
+
+
+
+@DrawLoop{
+DrawGraphic(GetX, GetY);
+}
+@Finalize
+{
+
+DeleteGraphic("\script\tesura\thomasevil.jpg");
+}
+function Bullet(let direction, let where, let timespan, let color)
+{
+let AngleTwo = direction - (where - 1) / 2 * timespan;
+loop (where)
+{
+CreateShot01(GetX, GetY, 1, AngleTwo, color, 6);
+AngleTwo += timespan;
+
+}
+}
+}
