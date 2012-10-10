@@ -72,7 +72,7 @@ function MoveToPlayer(move, yAdd, frame, left, right, top, bottom)
 {
 let x = 0;
 let y = 0;
-/*	if(GetPlayerX < GetX)
+	if(GetPlayerX < GetX)
 	{	x = GetX - move;
 	
 		if(x <  left)
@@ -88,7 +88,7 @@ let y = 0;
 		}
 	
 	
-	} */
+	} 
 	y = GetY + yAdd;
 	if( y < top )
 	{
