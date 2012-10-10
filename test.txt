@@ -14,6 +14,7 @@ SetLife(6969);
 LoadGraphic("\script\tesura\thomasevil.jpg");
 SetTexture("\script\tesura\thomasevil.jpg");
 SetGraphicRect(0,0,63, 63);
+EnemyMove;
 }
 @MainLoop
 {
@@ -21,16 +22,17 @@ SetCollisionA(GetX, GetY, 24);
 SetCollisionB(GetX, GetY, 24);
 ShotCounter ++;
 if (ShotCounter == 4)
-{
-Bullet (angle, 3, 4, WHITE01);
-angle += 10;
-}
-else if (ShotCounter == 12)
-{
-Bullet(angle, 6, 16, YELLOW01);
-angle += 5;
-ShotCounter = 0;
-}
+	{
+		Bullet (angle, 3, 4, WHITE01);
+		angle += 10;
+	}
+else if (ShotCounter == 8)
+	{
+		Bullet(angle, 6, 16, YELLOW01);
+		angle += 2;
+		ShotCounter = 0;
+	}
+yield;
 }
 
 
@@ -43,14 +45,61 @@ DrawGraphic(GetX, GetY);
 
 DeleteGraphic("\script\tesura\thomasevil.jpg");
 }
-function Bullet(let direction, let where, let timespan, let color)
+
+task EnemyMove
 {
-let AngleTwo = direction - (where - 1) / 2 * timespan;
-loop (where)
-{
-CreateShot01(GetX, GetY, 1, AngleTwo, color, 6);
-AngleTwo += timespan;
+yield;
+loop{
+loop(120) {yield;}
+MoveToPlayer(rand(20,40), rand(-10, 30), 60, GetClipMinX + 32, GetClipMinY + 32, GetClipMaxX - 32, GetClipMaxY +160);
 
 }
 }
+function Bullet(let direction, let where, let timespan, let color)
+{
+let radius = 36;
+let AngleTwo = direction - (where - 1) / 2 * timespan;
+	loop (where)
+	{
+		let x = GetX + radius * cos(AngleTwo);
+		let y = GetY + radius * sin(AngleTwo);
+		CreateShot01(x, y, 1, AngleTwo, color, 6);
+		AngleTwo += timespan;
+
+	}
 }
+function MoveToPlayer(move, yAdd, frame, left, right, top, bottom)
+{
+let x = 0;
+let y = 0;
+/*	if(GetPlayerX < GetX)
+	{	x = GetX - move;
+	
+		if(x <  left)
+		{
+			x = GetX + move;
+		}
+	}
+	else{
+		x = GetX + move;
+		if( right < x)
+		{
+			x = GetX - move;
+		}
+	
+	
+	} */
+	y = GetY + yAdd;
+	if( y < top )
+	{
+		y = top;
+	}
+	else if (bottom > y)
+	{
+		y = bottom;
+	}
+	SetMovePosition02(x, y, frame);
+}
+}
+
+
