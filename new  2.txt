@@ -1,0 +1,262 @@
+
+#東方弾幕風
+#Title[人界剣「悟入幻想 -Easy-」]
+#Text[妖々夢５面：妖夢スペルのクローン]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let name        = "人界剣「悟入幻想 -Easy-」";
+    let imgBoss     = "script\img\ExRumia.png";
+
+    // 初期位置
+    let xIni        = GetClipMaxX - 32;
+    let yIni        = GetClipMaxY - 32;
+
+    // 横薙ぎ後の位置
+    let xSlash      = GetClipMinX + 32;
+    let ySlash      = yIni;
+
+    // 開始位置
+    let xStart      = GetClipMinX + 48;
+    let yStart      = GetClipMinY + 96;
+
+    // レーザーの設置位置
+    let xLaserBegin = GetClipMaxX + 32;
+    let xLaserEnd   = GetClipMinX - 32;
+    let yLaser      = GetClipMaxY - 16;
+
+    @Initialize {
+        CutIn(YOUMU, name, "", 0, 0, 0, 0);
+
+        SetLife(2000);
+        SetTimer(66);
+        SetScore(4000000);
+        SetDamageRate(5, 5);
+
+        LoadGraphic(imgBoss);
+        SetTexture(imgBoss);
+        setGraphicStop;
+
+        TMain;
+    }
+
+    @MainLoop {
+        SetCollisionA(GetX, GetY, 32);
+        SetCollisionB(GetX, GetY, 16);
+
+        yield;
+    }
+
+    @DrawLoop {
+        DrawGraphic(GetX, GetY);
+    }
+
+    @Finalize {
+        DeleteGraphic(imgBoss);
+    }
+
+    // メインタスク
+    task TMain {
+        yield;
+
+        standBy;
+        levitate;
+        concentration;
+        slash;
+        ready;
+
+        TShotToAir;
+
+        loop {
+            move;
+            shot;
+        }
+    }
+
+    // 初期位置へ移動
+    sub standBy {
+        let wIni = 120;
+
+        SetMovePosition02(xIni, yIni, wIni);
+        setGraphicMove;
+
+        SetInvincibility(wIni);
+        wait(wIni);
+    }
+
+    // 浮揚
+    sub levitate {
+        let wLev = 60;
+
+        setGraphicStop;
+        SetMovePosition02(xIni, yIni + 10, wLev);
+        wait(wLev);
+        SetMovePosition02(xIni, yIni, wLev);
+        wait(wLev);
+    }
+
+    // 力を集中
+    sub concentration {
+        let wConc = 60;
+
+        setGraphicPose;
+        Concentration01(wConc);
+        wait(wConc);
+    }
+
+    // 横薙ぎ
+    sub slash {
+        let id    = 0;
+        let wMove = 10;
+        let wStop = 60 - wMove;
+        let span  = (xLaserBegin - xLaserEnd) / wMove;    // レーザーを延ばす間隔
+
+        CreateLaserA(id, xLaserBegin, yLaser, 0, 10, BLUE01, 0);
+        SetLaserDataA(id, 0, 180, 0, span, 0, 0);
+        SetLaserDataA(id, wMove, NULL, 0, 0, 0, 0);
+        FireShot(id);
+
+        SetMovePosition02(xSlash, ySlash, wMove);
+        setGraphicMove;
+        wait(wMove);
+        wait(wStop);
+    }
+
+    // 定位置へ移動して、攻撃開始
+    sub ready {
+        let wMove = 120;
+        let wStop = 60;
+
+        SetMovePosition02(xStart, yStart, wMove);
+        setGraphicMove;
+        wait(wMove);
+
+        setGraphicStop;
+        wait(wStop);
+
+        SetDamageRate(40, 40);
+    }
+
+    // 下から上へ常に発射される対空弾
+    task TShotToAir {
+        let wShot = 8;    // 発射間隔
+
+        loop {
+            CreateShot01(rand(GetClipMinX, GetClipMaxX),
+                         yLaser, 1, rand(-92, -88), BLUE11, wShot);
+            wait(wShot);
+        }
+    }
+
+    // 移動
+    sub move {
+        let wMove = 60;
+
+        moveToPlayer(rand(40, 80), rand(-40, 40), wMove,
+                     GetClipMinX + 48, GetClipMinY +  32,
+                     GetClipMaxX - 48, GetClipMinY + 128);
+        setGraphicMove;
+        wait(wMove);
+    }
+
+    // way 弾を発射
+    sub shot {
+        let base    = GetAngleToPlayer;      // 基準角
+        let angle   = 36;                    // 自機狙い 3-way 弾の間隔
+        let nShot   = 7;                     // 各弾を撃つ回数
+        let wShot   = 5;                     // 弾を撃つ間隔
+        let wBefore = 60 - wShot * nShot;    // 発射後に待つ時間
+        let v       = 1.5;                   // 発射速度
+        let delay   = wShot * nShot;         // 発射遅延時間
+
+        setGraphicPose;
+        wait(wBefore);
+
+        loop(nShot) {
+            nway(v, base + 180, 6, 30, delay);
+            nway(v, base, 3, angle, delay);
+            wait(wShot);
+
+            angle += 1;
+            v     -= 0.15;
+            delay -= wShot;
+        }
+    }
+
+    // n-way 弾を撃つ関数
+    //   v     : 発射速度
+    //   dir   : 弾を撃つ方向
+    //   way   : 弾の数
+    //   span  : 弾の間隔（角度）
+    //   delay : 発射遅延時間
+    function nway(v, dir, way, span, delay) {
+        let angle  = dir - (way - 1) / 2 * span;    // 発射角
+
+        loop(way) {
+            CreateShot01(GetX, GetY, v, angle, RED02, delay);
+            angle += span;
+        }
+    }
+
+    // なるべくプレイヤーの方向に移動
+    //   xMove  : x 方向の移動量（正の数）
+    //   yAdd   : y 方向の移動量
+    //   frame  : 移動に要するフレーム数
+    //   left   : 以下、可動範囲
+    //   top    :
+    //   right  :
+    //   bottom :
+    function moveToPlayer(xMove, yAdd, frame, left, top, right, bottom) {
+        let x;
+        let y;
+
+        if(GetPlayerX < GetX) {
+            // プレイヤーより右に敵がいれば、敵は左に動きます。
+            x = GetX - xMove;
+
+            // 但し、敵が可動領域の左端よりも左にいくようなら、右に動きます。
+            if(x < left) {
+                x = GetX + xMove;
+            }
+        } else {
+            // さもなくば、敵は右に動きます。
+            x = GetX + xMove;
+
+            // 但し、敵が可動領域の右端よりも右にいくようなら、左に動きます。
+            if(right < x) {
+                x = GetX - xMove;
+            }
+        }
+
+        // 可動領域の外に行く場合は、端っこで止めます。
+        y = GetY + yAdd;
+        if(y < top) {
+            y = top;
+        } else if(bottom < y) {
+            y = bottom;
+        }
+
+        SetMovePosition02(x, y, frame);
+    }
+
+    // グラフィックの設定
+    sub setGraphicStop  { SetGraphicRect(  0,   0,  64,  64); }
+    sub setGraphicPose  { SetGraphicRect( 64,   0, 128,  64); }
+    sub setGraphicLeft  { SetGraphicRect(128,   0, 192,  64); }
+    sub setGraphicRight { SetGraphicRect(192,   0, 256,  64); }
+
+    sub setGraphicMove {
+        if(GetSpeedX < 0) {
+            setGraphicLeft;
+        } else {
+            setGraphicRight;
+        }
+    }
+
+    // w フレームだけ待つ
+    function wait(w) {
+        loop(w) { yield; }
+    }
+}
+
+ 

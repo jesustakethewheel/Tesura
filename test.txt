@@ -2,15 +2,20 @@
 #Title [Narutouhou]
 #Text [The one winged angel that wille destroy the world]
 #ScriptVersion [2]
-
+#BGM[.\jesus.mp3]
 script_enemy_main {
 let angle = 90;
-let ShotCounter = 0; 
+let ShotCounter = 0;
+let name = "You just activated my trap card"; 
 @Initialize
+
 {
+CutIn(YOUMU, name, "", 0, 0, 0, 0);
 SetX(GetCenterX);
 SetY(GetClipMinY + 120);
 SetLife(6969);
+SetTimer(600);
+SetScore(40000000);
 LoadGraphic("\script\tesura\thomasevil.jpg");
 SetTexture("\script\tesura\thomasevil.jpg");
 SetGraphicRect(0,0,63, 63);
@@ -28,10 +33,25 @@ if (ShotCounter == 4)
 	}
 else if (ShotCounter == 8)
 	{
-		Bullet(angle, 6, 16, YELLOW01);
+		Bullet(angle, 6, 6, YELLOW01);
 		angle += 2;
-		ShotCounter = 0;
 	}
+if(ShotCounter == 24)
+{
+	Bullet(angle, 12, 12, RED04);
+	angle += 24;
+	ShotCounter = 0;
+	CreateShotA(1, GetX, GetY, 10);
+	SetShotDataA(1, 0, 5, 0, 2.2, 0, 5, RED03);
+	SetShotDataA(1, 60, 5, 132, 0, 0.1, 8, RED03);
+	ascent(i in 1..60){
+    //CreateShotA(2, 0, 0, 30);
+    SetShotDataA_XY(2, 0, rand(-1, 1), rand(-1, -4), 0, 0.1, 0, 3, RED01);
+    AddShot(i*2, 1, 2, 0);
+	}
+	FireShot(1);
+}
+	
 yield;
 }
 
@@ -51,7 +71,7 @@ task EnemyMove
 yield;
 loop{
 loop(120) {yield;}
-MoveToPlayer(rand(20,40), rand(-10, 30), 60, GetClipMinX + 32, GetClipMinY + 32, GetClipMaxX - 32, GetClipMaxY +160);
+MoveToPlayer(rand(20,40), rand(-10, 30), 60, GetClipMinX + 32, GetClipMinY + 32, GetClipMaxX - 32, GetClipMinY + 50);
 
 }
 }
@@ -75,26 +95,26 @@ let y = 0;
 	if(GetPlayerX < GetX)
 	{	x = GetX - move;
 	
-		if(x <  left)
+		if( GetX < left)
 		{
-			x = GetX + move;
+			x = GetX - move;
 		}
 	}
 	else{
 		x = GetX + move;
 		if( right < x)
 		{
-			x = GetX - move;
+			x = GetX + move;
 		}
 	
 	
 	} 
 	y = GetY + yAdd;
-	if( y < top )
+	if( y > top )
 	{
 		y = top;
 	}
-	else if (bottom > y)
+	else if (bottom < y)
 	{
 		y = bottom;
 	}
