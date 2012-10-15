@@ -1,0 +1,40 @@
+script_enemy_main
+{
+let angle = 90;
+let shotcounter = 0;
+@Initialize
+{
+SetY(GetClipMinY+120);
+SetX(GetCenterX);
+SetLife(200);
+LoadGraphic("\script\tesura\franklin.jpg");
+SetTexture("\script\tesura\franklin.jpg");
+SetGraphicRect(0,0,63,63);
+
+}
+@MainLoop
+{
+SetCollisionA(GetX, GetY, 24);
+SetCollisionB(GetX, GetY, 24);
+shotcounter++;
+if(shotcounter == 2)
+{
+CreateShot01(GetX, GetY, 1, angle, RED01, 4);
+angle++;
+}
+if(shotcounter == 8)
+{
+CreateShot01(GetX, GetY, 2, angle, RED04, 3);
+shotcounter = 0;
+angle++;
+}
+}
+@DrawLoop
+{
+DrawGraphic(GetX, GetY);
+}
+@Finalize
+{
+DeleteGraphic("\script\tesura\franklin.jpeg");
+}
+}

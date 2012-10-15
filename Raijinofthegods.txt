@@ -1,0 +1,71 @@
+#“Œ•û’e–‹•—[Stage]
+#Title[The West Wind of Raijin of Gods]
+#Text[The God of Electricity Tesla must defeat Edison]
+#Image[]
+#Background[]
+#BGM[]
+#Player[FREE]
+#ScriptVersion[2]
+
+script_stage_main
+
+{
+function Wait(let frames)
+{
+loop(frames){yield;}
+}
+function WaitForEnemy
+{
+while(GetEnemyNum !=0){yield;}
+}
+
+task stage
+{
+let enemy = 0; 
+let offset = 0;
+Wait(120);
+loop(10)
+{
+CreateEnemyFromFile(GetCurrentScriptDirectory~"franklin.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+offset += 40;
+enemy++;
+}
+WaitForEnemy;
+CreateEnemyBossFromFile(GetCurrentScriptDirectory~"test.txt", GetCenterX, GetCenterY, 0, 0, 0);
+WaitForEnemy;
+Wait(60);
+Clear;
+
+
+
+
+
+}
+@Initialize
+{
+stage;
+}
+
+@MainLoop
+{
+yield;
+}
+@BackGround
+{
+}
+@Finalize
+{
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+}

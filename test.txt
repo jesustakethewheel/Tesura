@@ -26,6 +26,7 @@ EnemyMove;
 SetCollisionA(GetX, GetY, 24);
 SetCollisionB(GetX, GetY, 24);
 ShotCounter ++;
+
 if (ShotCounter == 4)
 	{
 		Bullet (angle, 3, 4, WHITE01);
@@ -33,7 +34,8 @@ if (ShotCounter == 4)
 	}
 else if (ShotCounter == 8)
 	{
-		Bullet(angle, 6, 6, YELLOW01);
+		Bullet(angle, 3, 6, YELLOW01);
+		
 		angle += 2;
 	}
 if(ShotCounter == 24)
@@ -45,7 +47,7 @@ if(ShotCounter == 24)
 	SetShotDataA(1, 0, 5, 0, 2.2, 0, 5, RED03);
 	SetShotDataA(1, 60, 5, 132, 0, 0.1, 8, RED03);
 	ascent(i in 1..60){
-    //CreateShotA(2, 0, 0, 30);
+    //zCreateShotA(2, 0, 0, 30);
     SetShotDataA_XY(2, 0, rand(-1, 1), rand(-1, -4), 0, 0.1, 0, 3, RED01);
     AddShot(i*2, 1, 2, 0);
 	}
