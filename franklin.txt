@@ -10,7 +10,7 @@ SetLife(200);
 LoadGraphic("\script\tesura\franklin.jpg");
 SetTexture("\script\tesura\franklin.jpg");
 SetGraphicRect(0,0,63,63);
-
+moveEnemy;
 }
 @MainLoop
 {
@@ -28,6 +28,7 @@ CreateShot01(GetX, GetY, 2, angle, RED04, 3);
 shotcounter = 0;
 angle++;
 }
+yield;
 }
 @DrawLoop
 {
@@ -36,5 +37,21 @@ DrawGraphic(GetX, GetY);
 @Finalize
 {
 DeleteGraphic("\script\tesura\franklin.jpeg");
+}
+task moveEnemy
+{
+yield;
+loop{
+loop(120) {yield;}
+moveRandom(GetX);
+}
+}
+function moveRandom(x)
+{
+if (x > 0)
+{
+x = rand(0,40);
+x = x - 5;
+}
 }
 }
