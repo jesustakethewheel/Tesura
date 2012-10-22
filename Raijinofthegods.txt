@@ -8,33 +8,38 @@
 #ScriptVersion[2]
 
 script_stage_main
-
 {
 function Wait(let frames)
 {
-loop(frames){yield;}
+	loop(frames){yield;}
 }
 function WaitForEnemy
 {
-while(GetEnemyNum !=0){yield;}
+	while(GetEnemyNum !=0){yield;}
 }
 
 task stage
 {
-let enemy = 0; 
-let offset = 0;
-Wait(120);
-loop(10)
-{
-CreateEnemyFromFile(GetCurrentScriptDirectory~"franklin.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
-offset += 40;
-enemy++;
-}
-WaitForEnemy;
-CreateEnemyBossFromFile(GetCurrentScriptDirectory~"test.txt", GetCenterX, GetCenterY, 0, 0, 0);
-WaitForEnemy;
-Wait(60);
-Clear;
+	let enemy = 0; 
+	let offset = 0;
+	Wait(120);
+	loop(10) {
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"franklin.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+	offset += 40;
+	enemy++;
+	}
+	WaitForEnemy;
+	Wait(120);
+	loop(2) {yield;
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"joule.txt", (GetCenterX + rand(10, 30)), GetCenterY, 0, 0, 0);
+	enemy++;
+	}
+	WaitForEnemy;
+	Wait(120);
+	CreateEnemyBossFromFile(GetCurrentScriptDirectory~"test.txt", GetCenterX, GetCenterY, 0, 0, 0);
+	WaitForEnemy;
+	Wait(60);
+	Clear;
 
 
 
@@ -43,12 +48,12 @@ Clear;
 }
 @Initialize
 {
-stage;
+	stage;
 }
 
 @MainLoop
 {
-yield;
+	yield;
 }
 @BackGround
 {

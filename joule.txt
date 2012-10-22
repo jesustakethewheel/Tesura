@@ -6,9 +6,9 @@ script_enemy_main
 {
 	SetY(GetClipMinY+120);
 	SetX(GetCenterX);
-	SetLife(200);
-	LoadGraphic("\script\tesura\franklin.jpg");
-	SetTexture("\script\tesura\franklin.jpg");
+	SetLife(1000);
+	LoadGraphic("\script\tesura\joulethegodofraijins.jpg");
+	SetTexture("\script\tesura\joulethegodofraijins.jpg");
 	SetGraphicRect(0,0,63,63);
 	moveEnemy;
 }
@@ -36,7 +36,7 @@ script_enemy_main
 }
 @Finalize
 {
-	DeleteGraphic("\script\tesura\franklin.jpeg");
+	DeleteGraphic("\script\tesura\joulethegodofraijins.jpeg");
 }
 task moveEnemy
 	{

@@ -4,42 +4,42 @@
 #ScriptVersion [2]
 #BGM[.\jesus.mp3]
 script_enemy_main {
-let angle = 90;
-let ShotCounter = 0;
-let name = "You just activated my trap card"; 
+	let angle = 90;
+	let ShotCounter = 0;
+	let name = "You just activated my trap card"; 
 @Initialize
 
 {
-CutIn(YOUMU, name, "", 0, 0, 0, 0);
-SetX(GetCenterX);
-SetY(GetClipMinY + 120);
-SetLife(6969);
-SetTimer(600);
-SetScore(40000000);
-LoadGraphic("\script\tesura\thomasevil.jpg");
-SetTexture("\script\tesura\thomasevil.jpg");
-SetGraphicRect(0,0,63, 63);
-EnemyMove;
+	CutIn(YOUMU, name, "", 0, 0, 0, 0);
+	SetX(GetCenterX);
+	SetY(GetClipMinY + 120);
+	SetLife(6969);
+	SetTimer(600);
+	SetScore(40000000);
+	LoadGraphic("\script\tesura\thomasevil.jpg");
+	SetTexture("\script\tesura\thomasevil.jpg");
+	SetGraphicRect(0,0,63, 63);
+	EnemyMove;
 }
 @MainLoop
 {
-SetCollisionA(GetX, GetY, 24);
-SetCollisionB(GetX, GetY, 24);
-ShotCounter ++;
+	SetCollisionA(GetX, GetY, 24);
+	SetCollisionB(GetX, GetY, 24);
+	ShotCounter ++;
 
-if (ShotCounter == 4)
+	if (ShotCounter == 4)
 	{
 		Bullet (angle, 3, 4, WHITE01);
 		angle += 10;
 	}
-else if (ShotCounter == 8)
+	else if (ShotCounter == 8)
 	{
 		Bullet(angle, 3, 6, YELLOW01);
 		
 		angle += 2;
 	}
-if(ShotCounter == 24)
-{
+	if(ShotCounter == 24)
+	{
 	Bullet(angle, 12, 12, RED04);
 	angle += 24;
 	ShotCounter = 0;
@@ -60,20 +60,20 @@ yield;
 
 
 @DrawLoop{
-DrawGraphic(GetX, GetY);
+	DrawGraphic(GetX, GetY);
 }
 @Finalize
 {
 
-DeleteGraphic("\script\tesura\thomasevil.jpg");
+	DeleteGraphic("\script\tesura\thomasevil.jpg");
 }
 
 task EnemyMove
 {
-yield;
-loop{
-loop(120) {yield;}
-MoveToPlayer(rand(20,40), rand(-10, 30), 60, GetClipMinX + 32, GetClipMinY + 32, GetClipMaxX - 32, GetClipMinY + 50);
+	yield;
+	loop{
+	loop(120) {yield;}
+	MoveToPlayer(rand(20,40), rand(-10, 30), 60, GetClipMinX + 32, GetClipMinY + 32, GetClipMaxX - 32, GetClipMinY + 50);
 
 }
 }
