@@ -92,8 +92,8 @@ let AngleTwo = direction - (where - 1) / 2 * timespan;
 }
 function MoveToPlayer(move, yAdd, frame, left, right, top, bottom)
 {
-let x = 0;
-let y = 0;
+	let x = 0;
+	let y = 0;
 	if(GetPlayerX < GetX)
 	{	x = GetX - move;
 	
@@ -108,8 +108,6 @@ let y = 0;
 		{
 			x = GetX + move;
 		}
-	
-	
 	} 
 	y = GetY + yAdd;
 	if( y > top )

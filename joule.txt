@@ -22,11 +22,15 @@ script_enemy_main
 		CreateShot01(GetX, GetY, 1, angle, RED01, 10);
 		angle+= 60;
 	}
-	if(shotcounter == 24)
+	if(shotcounter == 100)
 	{
-		CreateShot01(GetX, GetY, 2, angle, RED04, 10);
+		CreateShot01(GetX, GetY, 2, angle, YELLOW04, 10);
 		shotcounter = 0;
 		angle++;
+		CreateLaserA(1, GetX, GetY, 10, 10, BLUE01, 100);
+		SetLaserDataA(1, 40, 90, 0, 2, 0, 0);
+		FireShot(1);
+		
 	}
 	yield;
 }
