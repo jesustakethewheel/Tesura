@@ -1,0 +1,34 @@
+#Åg??uÅfe????[Player]
+#ScriptVersion[2]
+#Menu[Tesla]
+#Text[The god of Men]
+#Image[.\spellcutin.jpeg]
+#ReplayName[Tesla]
+
+script_player_main{
+let spell = GetCurrentScriptDirectory()~"spellcutin.jpeg";
+let sprite = GetCurrentScriptDirectory()~"tesla.jpeg";
+  @Initialize{
+    LoadPlayerShotData
+    SetPlayerLifeImage
+    SetSpeed
+  }
+  @MainLoop{
+  }
+  @Missed{
+  }
+  @SpellCard{
+  }
+  @DrawLoop{
+  }
+  @Finalize
+  }
+}
+script_spell ScriptName{
+  @Initialize{
+  }
+  @MainLoop{
+  }
+  @Finalize{
+  }
+}

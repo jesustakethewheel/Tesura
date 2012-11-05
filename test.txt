@@ -8,8 +8,8 @@ script_enemy_main {
 	let ShotCounter = 0;
 	let name = "You just activated my trap card"; 
 @Initialize
-
 {
+	
 	CutIn(YOUMU, name, "", 0, 0, 0, 0);
 	SetX(GetCenterX);
 	SetY(GetClipMinY + 120);
@@ -26,7 +26,7 @@ script_enemy_main {
 	SetCollisionA(GetX, GetY, 24);
 	SetCollisionB(GetX, GetY, 24);
 	ShotCounter ++;
-
+	//keeps track of special shots and timing of shots
 	if (ShotCounter == 4)
 	{
 		Bullet (angle, 3, 4, WHITE01);
@@ -35,7 +35,7 @@ script_enemy_main {
 	else if (ShotCounter == 8)
 	{
 		Bullet(angle, 3, 6, YELLOW01);
-		
+		//special shot
 		angle += 2;
 	}
 	if(ShotCounter == 24)
@@ -50,6 +50,7 @@ script_enemy_main {
     //zCreateShotA(2, 0, 0, 30);
     SetShotDataA_XY(2, 0, rand(-1, 1), rand(-1, -4), 0, 0.1, 0, 3, RED01);
     AddShot(i*2, 1, 2, 0);
+	//special laser shot 2
 	}
 	FireShot(1);
 }

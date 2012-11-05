@@ -48,6 +48,7 @@ task moveEnemy
 }
 function moveRandom(x)
 {
+//gets random x and y between range and causes enemy to move there
 let y = GetY;
 	if (x > 0)
 	{

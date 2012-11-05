@@ -3,7 +3,7 @@
 #Text[The God of Electricity Tesla must defeat Edison]
 #Image[]
 #Background[]
-#BGM[]
+#BGM[.\jesus.mp3]
 #Player[FREE]
 #ScriptVersion[2]
 
@@ -12,10 +12,12 @@ script_stage_main
 function Wait(let frames)
 {
 	loop(frames){yield;}
+	//stop tasks for x number of frames
 }
 function WaitForEnemy
 {
 	while(GetEnemyNum !=0){yield;}
+	//stops task until all enemies are dead
 }
 
 task stage
@@ -25,6 +27,7 @@ task stage
 	Wait(120);
 	loop(10) {
 	CreateEnemyFromFile(GetCurrentScriptDirectory~"franklin.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+	//Creates weak enemy
 	offset += 40;
 	enemy++;
 	}
@@ -32,11 +35,13 @@ task stage
 	Wait(120);
 	loop(2) {yield;
 	CreateEnemyFromFile(GetCurrentScriptDirectory~"joule.txt", (GetCenterX + rand(10, 30)), GetCenterY, 0, 0, 0);
+	//creates another weak enemy
 	enemy++;
 	}
 	WaitForEnemy;
 	Wait(120);
 	CreateEnemyBossFromFile(GetCurrentScriptDirectory~"test.txt", GetCenterX, GetCenterY, 0, 0, 0);
+	//creates boss
 	WaitForEnemy;
 	Wait(60);
 	Clear;

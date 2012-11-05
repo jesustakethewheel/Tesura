@@ -1,0 +1,339 @@
+#“Œ•û’e–‹•—[Player]
+#ScriptVersion[2]
+#Menu[Tesla A]
+#Text[Tesla - God Among Men]
+#Image[.\spellcutin.png]
+#ReplayName[Tesla]
+
+script_player_main{
+  let img_sakuya = GetCurrentScriptDirectory()~"tesla.png";
+  let img_cutin = GetCurrentScriptDirectory()~"spellcutin.png";
+  let optionxpos=16;
+  let optionypos=0;
+  let count=-1;
+  let i=0;
+  
+  task Option(position){
+    let objoption=Obj_Create(OBJ_EFFECT);
+    Obj_SetAlpha(objoption,200);
+    ObjEffect_SetTexture(objoption,img_sakuya);  //uses star orb from spritesheet
+    ObjEffect_SetRenderState(objoption,ALPHA);
+    ObjEffect_SetPrimitiveType(objoption,PRIMITIVE_TRIANGLEFAN);
+    ObjEffect_CreateVertex(objoption,4);         // square object with 4 vertexes
+    ObjEffect_SetVertexUV(objoption,0,145,1);    // four coordinates of orb on spritesheet
+    ObjEffect_SetVertexUV(objoption,1,159,1);    // object is 15x15
+    ObjEffect_SetVertexUV(objoption,2,159,15);
+    ObjEffect_SetVertexUV(objoption,3,145,15);
+    if(position=="LEFT"){
+      while(!Obj_BeDeleted(objoption)){ 
+        ObjEffect_SetVertexXY(objoption,0,GetPlayerX-optionxpos-8,GetPlayerY+optionypos-7); 
+        ObjEffect_SetVertexXY(objoption,1,GetPlayerX-optionxpos+6,GetPlayerY+optionypos-7);
+        ObjEffect_SetVertexXY(objoption,2,GetPlayerX-optionxpos+6,GetPlayerY+optionypos+7);
+        ObjEffect_SetVertexXY(objoption,3,GetPlayerX-optionxpos-8,GetPlayerY+optionypos+7);
+        if(GetKeyState(VK_SLOWMOVE)==KEY_PUSH || GetKeyState(VK_SLOWMOVE)==KEY_HOLD){
+          if(count%6 == 3){	
+            JackTheRipper(GetPlayerX-optionxpos-1,GetPlayerY+optionypos-8,12);			
+          }
+        }else{
+          if(count%8 == 4){	
+            i=-2;
+            while(i<=2){
+              CreatePlayerShot01(GetPlayerX()-optionxpos-1, GetPlayerY()+optionypos-8, 10, 254+(i*8), 2, 1, 2);
+              i++;
+            }
+          }
+        }
+        yield;
+      }
+    }else{
+      while(!Obj_BeDeleted(objoption)){
+        ObjEffect_SetVertexXY(objoption,0,GetPlayerX+optionxpos-7,GetPlayerY+optionypos-7);
+        ObjEffect_SetVertexXY(objoption,1,GetPlayerX+optionxpos+7,GetPlayerY+optionypos-7);
+        ObjEffect_SetVertexXY(objoption,2,GetPlayerX+optionxpos+7,GetPlayerY+optionypos+7);
+        ObjEffect_SetVertexXY(objoption,3,GetPlayerX+optionxpos-7,GetPlayerY+optionypos+7);
+        if(GetKeyState(VK_SLOWMOVE)==KEY_PUSH || GetKeyState(VK_SLOWMOVE)==KEY_HOLD){
+          if(count%6 == 3){	
+            JackTheRipper(GetPlayerX+optionxpos,GetPlayerY+optionypos-8,12);				
+          }
+        }else{
+          if(count%8 == 4){	
+            i=-2;
+            while(i<=2){
+              CreatePlayerShot01(GetPlayerX()+optionxpos, GetPlayerY()+optionypos-8, 10, 286+(i*8), 2, 1, 2);
+              i++;
+            }
+          }
+        }
+        yield;
+      }
+    }
+  }
+  task JackTheRipper(x,y,graphic){
+    let enemy_target=-1;
+    let target_angle=270;
+    let test_angle=0;
+    ascent(i in EnumEnemyBegin..EnumEnemyEnd) {
+      enemy_target=EnumEnemyGetID(i);
+      test_angle=atan2(GetEnemyInfo(enemy_target,ENEMY_Y)-GetPlayerY, GetEnemyInfo(enemy_target,ENEMY_X)-GetPlayerX);
+      if(test_angle<=-60 && test_angle>=-120){
+        i=EnumEnemyEnd;
+      }else{
+        enemy_target=-1;
+      }
+    }
+    if(enemy_target!=-1){
+      target_angle=atan2(GetEnemyInfo(enemy_target,ENEMY_Y)-y, GetEnemyInfo(enemy_target,ENEMY_X)-x);
+      CreatePlayerShot01(x,y,15,target_angle,6,1,graphic);
+    }else{
+      CreatePlayerShot01(x,y,15,270,6,1,graphic);
+    }
+  }
+  @Initialize{
+    LoadGraphic(img_sakuya);
+    LoadGraphic(img_cutin);
+    LoadPlayerShotData(GetCurrentScriptDirectory()~"sakuya_shotdata.txt");
+    SetPlayerLifeImage(img_sakuya, 96, 48, 143, 95);
+    SetSpeed(3.5, 2.5);
+    Option("LEFT");
+    Option("RIGHT");
+  }
+  @MainLoop{
+    if((GetKeyState(VK_SHOT)==KEY_PUSH || GetKeyState(VK_SHOT)==KEY_HOLD) && count==-1){
+      count = 0;
+    }
+    if(GetKeyState(VK_SLOWMOVE)==KEY_PUSH || GetKeyState(VK_SLOWMOVE)==KEY_HOLD){
+      if(count%6 == 0){	
+        JackTheRipper(GetPlayerX-8,GetPlayerY-8,11);
+        JackTheRipper(GetPlayerX+8,GetPlayerY-8,11);
+      }
+      if(optionxpos>12){optionxpos--;}
+      if(optionypos>-12){optionypos--;}
+    }else{	
+      if(count%8 == 0){	
+        i=-3;
+        while(i<=3){
+          CreatePlayerShot01(GetPlayerX(), GetPlayerY()-8, 10, 270+(i*5), 2.5, 1, 1);
+          i++;
+        }
+      }
+      if(optionxpos<20){optionxpos++;}
+      if(optionypos<0){optionypos++;}
+    }
+    if(count >= 0){
+      count++;
+    }
+    if(count >= 6 && (GetKeyState(VK_SLOWMOVE)==KEY_PUSH || GetKeyState(VK_SLOWMOVE)==KEY_HOLD)){
+      count=-1;
+    }
+    if(count >= 8){
+      count=-1;
+    }
+    SetIntersectionCircle(GetPlayerX, GetPlayerY, 2);
+    yield;
+  }
+  @Missed{
+  }
+  @SpellCard{	
+    SetSpeed(1, 1);
+    if(GetKeyState(VK_SLOWMOVE)==KEY_PUSH || GetKeyState(VK_SLOWMOVE)==KEY_HOLD){
+      UseSpellCard("KillerDoll", 0);
+      CutIn(KOUMA,"Illusion Sign ?uKiller Doll?v", img_cutin);
+    }else{
+      UseSpellCard("Indiscriminate", 0);
+      CutIn(KOUMA,"Illusion Sign ?uIndiscriminate?v", img_cutin);
+    } 
+  }
+  @DrawLoop{
+    SetTexture(img_sakuya);
+    if(GetKeyState(VK_LEFT)==KEY_PUSH || GetKeyState(VK_LEFT)==KEY_HOLD){
+      SetGraphicRect(49.5, 1.5, 95.5, 47.5); // left movement frame
+    }else if(GetKeyState(VK_RIGHT)==KEY_PUSH || GetKeyState(VK_RIGHT)==KEY_HOLD){
+      SetGraphicRect(97.5, 1.5, 143.5, 47.5); // right movement frame
+    }else{
+      SetGraphicRect(1.5, 1.5, 47.5, 47.5); // neutral frame
+    }
+    DrawGraphic(GetPlayerX(), GetPlayerY());
+  }
+  @Finalize{
+    DeleteGraphic(img_sakuya);
+    DeleteGraphic(img_cutin);
+  }
+}
+
+script_spell Indiscriminate{
+  let spellcount=0;
+  let spellangle=0;
+  let img_spell = GetCurrentScriptDirectory()~"spellcutin.png";
+  task Spell_Knife(angle,type){
+    let objknife=Obj_Create(OBJ_SPELL);
+    let knifexpos=GetPlayerX;
+    let knifeypos=GetPlayerY;
+    let knifeangle=angle;
+    Obj_SetAlpha(objknife,200);
+    ObjEffect_SetTexture(objknife,img_spell);
+    ObjEffect_SetRenderState(objknife,ADD);
+    ObjEffect_CreateVertex(objknife,4);
+    ObjEffect_SetPrimitiveType(objknife,PRIMITIVE_TRIANGLEFAN);
+    if(type==1){
+      ObjEffect_SetVertexUV(objknife,0,1,1);
+      ObjEffect_SetVertexUV(objknife,1,46,1);
+      ObjEffect_SetVertexUV(objknife,2,46,46);
+      ObjEffect_SetVertexUV(objknife,3,1,46);
+    }else{
+      ObjEffect_SetVertexUV(objknife,0,49,1);
+      ObjEffect_SetVertexUV(objknife,1,94,1);
+      ObjEffect_SetVertexUV(objknife,2,94,46);
+      ObjEffect_SetVertexUV(objknife,3,49,46);
+    }
+    while(!Obj_BeDeleted(objknife)){
+      if(type==1){
+        knifeangle-=1;	
+      }else{
+        knifeangle+=1;
+      }
+      knifexpos=knifexpos+(8*cos(180+knifeangle));
+      knifeypos=knifeypos+(8*sin(180+knifeangle));
+      ObjEffect_SetVertexXY(objknife,0,knifexpos+(45*cos(135+knifeangle)),knifeypos+(45*sin(135+knifeangle)));
+      ObjEffect_SetVertexXY(objknife,1,knifexpos+(45*cos(225+knifeangle)),knifeypos+(45*sin(225+knifeangle)));
+      ObjEffect_SetVertexXY(objknife,2,knifexpos+(45*cos(315+knifeangle)),knifeypos+(45*sin(315+knifeangle)));
+      ObjEffect_SetVertexXY(objknife,3,knifexpos+(45*cos(45+knifeangle)),knifeypos+(45*sin(45+knifeangle)));
+      ObjSpell_SetIntersecrionCircle(objknife,knifexpos,knifeypos,30,10,true);
+      yield;
+    }
+  }
+  task run{
+    ForbidShot(true);
+    loop(45){yield;}
+    while(spellcount<90){
+      if(spellcount%5==0){
+        Spell_Knife(spellangle,1);
+        Spell_Knife(spellangle+90,2);
+        Spell_Knife(spellangle+180,1);
+        Spell_Knife(spellangle+270,2);
+        spellangle+=40;
+        PlaySE(GetCurrentScriptDirectory()~"knife.wav");
+      }
+      spellcount++;
+      yield;
+    }
+    ForbidShot(false);
+    SetSpeed(3.5, 2.5);
+    loop(90){yield;}
+    End();
+  }
+  @Initialize{
+    SetPlayerInvincibility(240);
+    LoadGraphic(img_spell);
+    run();
+  }
+  @MainLoop{
+    CollectItems();
+    yield;
+  }
+  @Finalize{
+    DeleteGraphic(img_spell);
+  }
+}
+
+script_spell KillerDoll{
+  let spellcount=0;
+  let spellangle=0;
+  let img_spell = GetCurrentScriptDirectory()~"spellcutin.png";
+  task Spell_Knife(angle,type){
+    let objknife=Obj_Create(OBJ_SPELL);
+    let knifexpos=GetPlayerX;
+    let knifeypos=GetPlayerY;
+    let knifexpos2=GetPlayerX;
+    let knifeypos2=GetPlayerY;
+    let knifeangle=angle;
+    let knifespin=angle+180;
+    let knifecount=0;
+    Obj_SetAlpha(objknife,200);
+    ObjEffect_SetTexture(objknife,img_spell);
+    ObjEffect_SetRenderState(objknife,ADD);
+    ObjEffect_CreateVertex(objknife,4);
+    ObjEffect_SetPrimitiveType(objknife,PRIMITIVE_TRIANGLEFAN);
+    if(type==1){
+      ObjEffect_SetVertexUV(objknife,0,1,1);
+      ObjEffect_SetVertexUV(objknife,1,46,1);
+      ObjEffect_SetVertexUV(objknife,2,46,46);
+      ObjEffect_SetVertexUV(objknife,3,1,46);
+    }else{
+      ObjEffect_SetVertexUV(objknife,0,49,1);
+      ObjEffect_SetVertexUV(objknife,1,94,1);
+      ObjEffect_SetVertexUV(objknife,2,94,46);
+      ObjEffect_SetVertexUV(objknife,3,49,46);
+    }
+    while(!Obj_BeDeleted(objknife)){
+      if(knifecount<60){
+        knifespin+=4;
+        knifexpos=knifexpos+(cos(180+knifeangle));
+        knifeypos=knifeypos+(sin(180+knifeangle));
+        knifexpos2=knifexpos;
+        knifeypos2=knifeypos;
+        ObjSpell_SetIntersecrionCircle(objknife,knifexpos,knifeypos,30,1,true);
+      }else{
+        knifexpos=knifexpos+(20*cos(180+knifeangle));
+        knifeypos=knifeypos+(20*sin(180+knifeangle));
+        knifexpos2=knifexpos2+(5*cos(180+knifeangle));
+        knifeypos2=knifeypos2+(5*sin(180+knifeangle));
+        ObjSpell_SetIntersecrionCircle(objknife,knifexpos,knifeypos,30,6,true);
+      }
+      if(knifecount==60){
+        let enemy_target=-1;
+        ascent(i in EnumEnemyBegin..EnumEnemyEnd) {
+          enemy_target=EnumEnemyGetID(i);
+          i=EnumEnemyEnd;
+        }
+        if(enemy_target!=-1){
+          knifeangle=180+atan2(GetEnemyInfo(enemy_target,ENEMY_Y)-knifeypos, GetEnemyInfo(enemy_target,ENEMY_X)-knifexpos);
+          knifespin=knifeangle;
+        }
+        PlaySE(GetCurrentScriptDirectory()~"knife.wav");
+      }
+      ObjEffect_SetVertexXY(objknife,0,knifexpos+(45*cos(135+knifespin)),knifeypos+(45*sin(135+knifespin)));
+      ObjEffect_SetVertexXY(objknife,1,knifexpos+(45*cos(225+knifespin)),knifeypos+(45*sin(225+knifespin)));
+      ObjEffect_SetVertexXY(objknife,2,knifexpos2+(45*cos(315+knifespin)),knifeypos2+(45*sin(315+knifespin)));
+      ObjEffect_SetVertexXY(objknife,3,knifexpos2+(45*cos(45+knifespin)),knifeypos2+(45*sin(45+knifespin)));
+      knifecount++;
+      if(knifecount>120){
+        Obj_Delete(objknife);
+      }
+      yield;
+    }
+  }
+  task run{
+    SetPlayerInvincibility(240);
+    ForbidShot(true);
+    loop(45){yield;}
+    while(spellcount<90){
+      if(spellcount%8==0){
+        Spell_Knife(spellangle,1);
+        Spell_Knife(spellangle+180,1);
+	spellangle+=20;
+      }
+      if(spellcount%8==4){
+        Spell_Knife(spellangle,2);
+        Spell_Knife(spellangle+180,2);
+        spellangle+=20;
+      }
+      spellcount++;
+      yield;
+    }
+    ForbidShot(false);
+    SetSpeed(3.5, 2.5);
+    loop(180){yield;}
+    End();
+  }
+  @Initialize{
+    LoadGraphic(img_spell);
+    run();
+  }
+  @MainLoop{
+    CollectItems();
+    yield;
+  }
+  @Finalize{
+    DeleteGraphic(img_spell);
+  }
+}

@@ -1,0 +1,26 @@
+#PlayerShotData
+ShotImage=".\sakuya.png"
+ShotData{
+  id=1
+  rect=(1,49,47,95)
+  render=ALPHA
+  alpha=160
+}
+ShotData{
+  id = 2
+  rect = (49,49,95,95)
+  render = ALPHA
+  alpha=160
+}
+ShotData{
+  id = 11 //ID
+  rect = (1,49,47,95)
+  render = ALPHA
+  alpha=200
+}
+ShotData{
+  id = 12 //ID
+  rect = (49,49,95,95)
+  render = ALPHA
+  alpha=200
+}

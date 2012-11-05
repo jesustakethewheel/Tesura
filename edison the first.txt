@@ -1,0 +1,32 @@
+#Åg??uÅfe????[Player]
+#ScriptVersion[2]
+#Menu[Tesla]
+#Text[The god of Men]
+#Image[Player image]
+#ReplayName[Tesla]
+
+script_player_main{
+  @Initialize{
+    LoadPlayerShotData
+    SetPlayerLifeImage
+    SetSpeed
+  }
+  @MainLoop{
+  }
+  @Missed{
+  }
+  @SpellCard{
+  }
+  @DrawLoop{
+  }
+  @Finalize
+  }
+}
+script_spell ScriptName{
+  @Initialize{
+  }
+  @MainLoop{
+  }
+  @Finalize{
+  }
+}
