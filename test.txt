@@ -1,5 +1,5 @@
 #“Œ•û’e–‹•—[Single]
-#Title [Narutouhou]
+#Title [The god of lightning]
 #Text [The one winged angel that wille destroy the world]
 #ScriptVersion [2]
 #BGM[.\jesus.mp3]
