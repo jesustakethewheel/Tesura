@@ -1,0 +1,50 @@
+#“Œ•û’e–‹•—[Stage]
+#Title[Tesla's Adventure through heaven]
+#Text[The god of Electricity destroys his enemies]
+#Image[]
+#BackGround[Default]
+#BGM[]
+#Player[player\Tesla\testlathefirst.txt]
+#ScriptVersion[2]
+
+
+script_stage_main
+{
+#include_script "script\Tesura\Raijinofthegods.txt"
+#include_script "script\Tesura\thestageofsecondshowdown.txt"
+function Wait(let frames)
+{
+	loop(frames){yield;}
+	//stop tasks for x number of frames
+}
+function WaitForEnemy
+{
+	while(GetEnemyNum !=0){yield;}
+	//stops task until all enemies are dead
+}
+
+
+task stage {
+		Raijinofthegods();
+		wait(200);
+		thestageofsecondshowdown();	
+		ClearStage;
+	}
+	
+
+@Initialize
+{
+	stage;
+}
+
+@MainLoop
+{
+	yield;
+}
+@BackGround
+{
+}
+@Finalize
+{
+}
+}

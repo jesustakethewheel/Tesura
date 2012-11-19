@@ -1,0 +1,126 @@
+#“Œ•û’e–‹•—[Single]
+#Title [The god of lightning]
+#Text [The one winged angel that wille destroy the world]
+#ScriptVersion [2]
+#BGM[.\jesus.mp3]
+script_enemy_main {
+	let angle = 90;
+	let ShotCounter = 0;
+	let name = "Oh god, where art thou in our brazen world?"; 
+@Initialize
+{
+	
+	CutIn(YOUMU, name, "", 0, 0, 0, 0);
+	SetX(GetCenterX);
+	SetY(GetClipMinY + 120);
+	SetLife(6969);
+	SetTimer(600);
+	SetScore(40000000);
+	LoadGraphic("\script\tesura\Gugfug.png");
+	SetTexture("\script\tesura\Gugfug.png");
+	SetGraphicRect(0,0,63, 63);
+	EnemyMove;
+}
+@MainLoop
+{
+	SetCollisionA(GetX, GetY, 24);
+	SetCollisionB(GetX, GetY, 24);
+	ShotCounter ++;
+	//keeps track of special shots and timing of shots
+	if (ShotCounter == 4)
+	{
+		Bullet (angle, 3, 4, WHITE01);
+		angle += 10;
+	}
+	else if (ShotCounter == 8)
+	{
+		Bullet(angle, 3, 6, YELLOW01);
+		//special shot
+		angle += 2;
+	}
+	if(ShotCounter == 24)
+	{
+	Bullet(angle, 12, 12, RED04);
+	angle += 24;
+	ShotCounter = 0;
+	CreateShotA(1, GetX, GetY, 10);
+	SetShotDataA(1, 0, 5, 0, 2.2, 0, 5, RED03);
+	SetShotDataA(1, 60, 5, 132, 0, 0.1, 8, RED03);
+	ascent(i in 1..60){
+    //zCreateShotA(2, 0, 0, 30);
+    SetShotDataA_XY(2, 0, rand(-1, 1), rand(-1, -4), 0, 0.1, 0, 3, RED01);
+    AddShot(i*2, 1, 2, 0);
+	//special laser shot 2
+	}
+	FireShot(1);
+}
+	
+yield;
+}
+
+
+
+@DrawLoop{
+	DrawGraphic(GetX, GetY);
+}
+@Finalize
+{
+
+	DeleteGraphic("\script\tesura\gugfug.png");
+}
+
+task EnemyMove
+{
+	yield;
+	loop{
+	loop(120) {yield;}
+	MoveToPlayer(rand(20,40), rand(-10, 30), 60, GetClipMinX + 32, GetClipMinY + 32, GetClipMaxX - 32, GetClipMinY + 50);
+
+}
+}
+function Bullet(let direction, let where, let timespan, let color)
+{
+let radius = 36;
+let AngleTwo = direction - (where - 1) / 2 * timespan;
+	loop (where)
+	{
+		let x = GetX + radius * cos(AngleTwo);
+		let y = GetY + radius * sin(AngleTwo);
+		CreateShot01(x, y, 1, AngleTwo, color, 6);
+		AngleTwo += timespan;
+
+	}
+}
+function MoveToPlayer(move, yAdd, frame, left, right, top, bottom)
+{
+	let x = 0;
+	let y = 0;
+	if(GetPlayerX < GetX)
+	{	x = GetX - move;
+	
+		if( GetX < left)
+		{
+			x = GetX - move;
+		}
+	}
+	else{
+		x = GetX + move;
+		if( right < x)
+		{
+			x = GetX + move;
+		}
+	} 
+	y = GetY + yAdd;
+	if( y > top )
+	{
+		y = top;
+	}
+	else if (bottom < y)
+	{
+		y = bottom;
+	}
+	SetMovePosition02(x, y, frame);
+}
+}
+
+

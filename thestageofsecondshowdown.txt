@@ -1,0 +1,81 @@
+#“Œ•û’e–‹•—[Stage]
+#Title[The East Wind of Raijin of Gods]
+#Text[The God of Electricity Tesla must defeat Gugliemamam]
+#Image[]
+#Background[]
+#BGM[.\jesus.mp3]
+#Player[FREE]
+#ScriptVersion[2]
+
+script_stage_main
+{
+function Wait(let frames)
+{
+	loop(frames){yield;}
+	//stop tasks for x number of frames
+}
+function WaitForEnemy
+{
+	while(GetEnemyNum !=0){yield;}
+	//stops task until all enemies are dead
+}
+
+task stage
+{
+	let enemy = 0; 
+	let offset = 0;
+	Wait(120);
+	loop(10) {
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"ohm.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+	//Creates weak enemy
+	offset += 40;
+	enemy++;
+	}
+	WaitForEnemy;
+	Wait(120);
+	loop(2) {yield;
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"elihu.txt", (GetCenterX + rand(10, 30)), GetCenterY, 0, 0, 0);
+	//creates another weak enemy
+	enemy++;
+	}
+	WaitForEnemy;
+	Wait(120);
+	CreateEnemyBossFromFile(GetCurrentScriptDirectory~"gugufug.txt", GetCenterX, GetCenterY, 0, 0, 0);
+	//creates boss
+	WaitForEnemy;
+	Wait(60);
+	Clear;
+
+
+
+
+
+}
+@Initialize
+{
+	stage;
+}
+
+@MainLoop
+{
+	yield;
+}
+@BackGround
+{
+}
+@Finalize
+{
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+}

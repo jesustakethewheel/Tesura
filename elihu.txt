@@ -1,0 +1,63 @@
+script_enemy_main
+{
+	let angle = 90;
+	let shotcounter = 0;
+@Initialize
+{
+	SetY(GetClipMinY+120);
+	SetX(GetCenterX);
+	SetLife(200);
+	LoadGraphic("\script\tesura\elifagu.png");
+	SetTexture("\script\tesura\elifagu.png");
+	SetGraphicRect(0,0,63,63);
+	moveEnemy;
+}
+@MainLoop
+{
+	SetCollisionA(GetX, GetY, 24);
+	SetCollisionB(GetX, GetY, 24);
+	shotcounter++;
+	if(shotcounter == 2)
+	{	
+		CreateShot01(GetX, GetY, 1, angle, RED01, 10);
+		angle+= 60;
+	}
+	if(shotcounter == 24)
+	{
+		CreateShot01(GetX, GetY, 2, angle, RED04, 10);
+		shotcounter = 0;
+		angle++;
+	}
+	yield;
+}
+@DrawLoop
+{
+	DrawGraphic(GetX, GetY);
+}
+@Finalize
+{
+	DeleteGraphic("\script\tesura\elifagu.png");
+}
+task moveEnemy
+	{
+	yield;
+	loop{
+		loop(120) {yield;}
+		moveRandom(GetX);
+		}
+}
+function moveRandom(x)
+{
+//gets random x and y between range and causes enemy to move there
+let y = GetY;
+	if (x > 0)
+	{
+		x = rand(150,400);
+	}
+	if(y > 0)
+	{
+		y = rand(100, 300);
+	}
+	SetMovePosition02(x, y, 30);
+}
+}
