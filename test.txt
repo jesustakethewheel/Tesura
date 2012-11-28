@@ -6,7 +6,8 @@
 script_enemy_main {
 	let angle = 90;
 	let ShotCounter = 0;
-	let name = "You just activated my trap card"; 
+	let name = "You just activated my trap card";
+
 @Initialize
 {
 	
@@ -23,6 +24,7 @@ script_enemy_main {
 }
 @MainLoop
 {
+
 	SetCollisionA(GetX, GetY, 24);
 	SetCollisionB(GetX, GetY, 24);
 	ShotCounter ++;

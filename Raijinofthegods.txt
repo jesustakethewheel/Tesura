@@ -40,6 +40,7 @@ task stage
 	}
 	WaitForEnemy;
 	Wait(120);
+	CreateEventFromScript(GetCurrentScriptDirectory~"event.txt");
 	CreateEnemyBossFromFile(GetCurrentScriptDirectory~"test.txt", GetCenterX, GetCenterY, 0, 0, 0);
 	//creates boss
 	WaitForEnemy;

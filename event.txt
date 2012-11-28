@@ -1,0 +1,49 @@
+script_event talk_with_edison
+{
+
+	let img_sideTesla = GetCurrentScriptDirectory()~"teslasideshot.png";
+	let img_sideEdison = GetCurrentScriptDirectory()~"edisonsideshot.png";
+		@Initialize{
+		LoadGraphic(img_sideTesla);
+		LoadGraphic(img_sideEdison);
+		
+	}
+	@MainLoop
+	{
+	SetChar(LEFT, img_sideTesla);
+		SetGraphicRect(LEFT, 0,0,200,250);
+		MoveChar(RIGHT, BACK);
+		MoveChar(LEFT, FRONT);
+		TextOutA("\c[BLUE]Man, I can't see anything.");
+		SetChar(LEFT, img_sideEdison);
+		/*TextOutA("\c[BLUE]Wait, I think I see the shrine up ahead.");
+		SetChar(LEFT, imgMarisa2);
+		TextOutA("\c[BLUE]Reimu! HEY, REIMU!");
+		MoveChar(LEFT, BACK);
+		SetChar(RIGHT, imgYayoi1);
+		SetGraphicRect(RIGHT, 0, 0, 200, 250);
+		MoveChar(RIGHT, FRONT);
+		TextOutA("\c[RED]What fool dares intrude upon my sacred shrine?");
+		SetNameFromText(RIGHT, TEXT_RED, "Yayoi Yajima", "The Maiden that Lurks Above");
+		MoveChar(RIGHT, BACK);
+		MoveChar(LEFT, FRONT);
+		SetChar(LEFT, imgMarisa1);
+		TextOutA("\c[BLUE]Hey, did you eat Reimu?");
+		MoveChar(LEFT, BACK);
+		MoveChar(RIGHT, FRONT);
+		TextOutA("\c[RED]Hehehe! Dozens of humans who have triedto take this shrine from me,");
+		SetChar(RIGHT, imgYayoi2);
+		TextOutA("\c[RED]and I have eaten them all!");
+		TextOutA("\c[RED]You will be next, witch!");
+		DeleteName(RIGHT);
+		MoveChar(RIGHT, BACK);
+		MoveChar(LEFT, FRONT);
+		SetChar(LEFT, imgMarisa3s);
+		TextOutA("\c[BLUE]You actually ate people?");*/
+		}
+			@Finalize{
+		DeleteGraphic(img_sideTesla);
+		DeleteGraphic(img_sideEdison);
+		
+	}
+	}
