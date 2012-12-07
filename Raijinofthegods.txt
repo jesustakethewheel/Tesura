@@ -40,8 +40,33 @@ task stage
 	}
 	WaitForEnemy;
 	Wait(120);
-	CreateEventFromScript(GetCurrentScriptDirectory~"event.txt");
+	//CreateEventFromScript(GetCurrentScriptDirectory~"event.txt");
 	CreateEnemyBossFromFile(GetCurrentScriptDirectory~"test.txt", GetCenterX, GetCenterY, 0, 0, 0);
+	//creates boss
+	WaitForEnemy;
+	Wait(60);
+		let enemy = 0; 
+	let offset = 0;
+	Wait(120);
+	/*DeleteEnemyShot(ALL);
+	yield;
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"ohm.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+	yield;
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"ohm.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+	yield;
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"ohm.txt", (GetCenterX + offset), GetCenterY, 0, 0, 0);
+	yield;
+	
+	//Creates weak enemy
+	WaitForEnemy;
+	Wait(120);
+	yield;
+	CreateEnemyFromFile(GetCurrentScriptDirectory~"elihu.txt", (GetCenterX + rand(10, 30)), GetCenterY, 0, 0, 0);
+	//creates another weak enemy
+	enemy++;
+	WaitForEnemy;
+	Wait(120);*/
+	CreateEnemyBossFromFile(GetCurrentScriptDirectory~"gugufug.txt", GetCenterX, GetCenterY, 0, 0, 0);
 	//creates boss
 	WaitForEnemy;
 	Wait(60);
